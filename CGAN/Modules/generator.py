@@ -3,8 +3,8 @@ import torch.nn as nn
 
 
 class generator(nn.Module):
-    def __int__(self, input_dim, hidden_dim, im_dim):
-        super(generator, self).__int__()
+    def __init__(self, input_dim, hidden_dim, im_dim):
+        super(generator, self).__init__()
         self.generator = nn.Sequential(
             self.generator_block(input_dim, hidden_dim * 4, 3, 2, 0, last_layer=False),
             self.generator_block(hidden_dim * 4, hidden_dim * 2, 4, 1, 0, last_layer=False),
