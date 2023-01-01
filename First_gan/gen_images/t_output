@@ -1,0 +1,201 @@
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 127.05it/s]
+The loss of the generator is 4.129624927488963 and the loss of the discriminator is 0.1157099406725339 for epoch no. 0
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.99it/s]
+The loss of the generator is 3.1781019663174948 and the loss of the discriminator is 0.17141067624663314 for epoch no. 1
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 131.30it/s]
+The loss of the generator is 2.6331812653303146 and the loss of the discriminator is 0.23858884302253525 for epoch no. 2
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.96it/s]
+The loss of the generator is 2.24042290716966 and the loss of the discriminator is 0.2960969640697042 for epoch no. 3
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.44it/s]
+The loss of the generator is 2.011859038654963 and the loss of the discriminator is 0.34002117933730286 for epoch no. 4
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.70it/s]
+The loss of the generator is 1.7118278297901153 and the loss of the discriminator is 0.40179170037110645 for epoch no. 5
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.57it/s]
+The loss of the generator is 1.539767042998473 and the loss of the discriminator is 0.44180998110175135 for epoch no. 6
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 123.07it/s]
+The loss of the generator is 1.427828582461675 and the loss of the discriminator is 0.4661536393324534 for epoch no. 7
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.75it/s]
+The loss of the generator is 1.3796353758176167 and the loss of the discriminator is 0.4791689589897792 for epoch no. 8
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.30it/s]
+The loss of the generator is 1.3453494025468826 and the loss of the discriminator is 0.48913219222227733 for epoch no. 9
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.60it/s]
+The loss of the generator is 1.3042014559110007 and the loss of the discriminator is 0.5034699789484341 for epoch no. 10
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 129.96it/s]
+The loss of the generator is 1.29123515513738 and the loss of the discriminator is 0.5064634023110072 for epoch no. 11
+100%|██████████████████████████████████████| 7500/7500 [00:58<00:00, 127.62it/s]
+The loss of the generator is 1.3006880048195522 and the loss of the discriminator is 0.5031488801658154 for epoch no. 12
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 119.15it/s]
+The loss of the generator is 1.2893258265256882 and the loss of the discriminator is 0.5047262018183867 for epoch no. 13
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 123.32it/s]
+The loss of the generator is 1.2990988446553549 and the loss of the discriminator is 0.5031674583931764 for epoch no. 14
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.25it/s]
+The loss of the generator is 1.3010358400901159 and the loss of the discriminator is 0.5022964056432248 for epoch no. 15
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.04it/s]
+The loss of the generator is 1.309176641790072 and the loss of the discriminator is 0.49916210072040557 for epoch no. 16
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 123.84it/s]
+The loss of the generator is 1.28753079615434 and the loss of the discriminator is 0.5056523172001044 for epoch no. 17
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 119.70it/s]
+The loss of the generator is 1.3033661776383718 and the loss of the discriminator is 0.5002773788571357 for epoch no. 18
+100%|██████████████████████████████████████| 7500/7500 [01:06<00:00, 112.61it/s]
+The loss of the generator is 1.3071426039059957 and the loss of the discriminator is 0.5016258837898572 for epoch no. 19
+100%|██████████████████████████████████████| 7500/7500 [01:04<00:00, 116.41it/s]
+The loss of the generator is 1.314498881737391 and the loss of the discriminator is 0.49849665421644845 for epoch no. 20
+100%|██████████████████████████████████████| 7500/7500 [01:05<00:00, 114.58it/s]
+The loss of the generator is 1.2802322751919428 and the loss of the discriminator is 0.5110351515054703 for epoch no. 21
+100%|██████████████████████████████████████| 7500/7500 [01:06<00:00, 112.77it/s]
+The loss of the generator is 1.3147469655911128 and the loss of the discriminator is 0.5013399420619011 for epoch no. 22
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 118.29it/s]
+The loss of the generator is 1.3234187881469726 and the loss of the discriminator is 0.49691488059361777 for epoch no. 23
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 118.58it/s]
+The loss of the generator is 1.3385967006842294 and the loss of the discriminator is 0.49370744056304294 for epoch no. 24
+100%|██████████████████████████████████████| 7500/7500 [01:05<00:00, 114.83it/s]
+The loss of the generator is 1.3467768167416254 and the loss of the discriminator is 0.4927521197636922 for epoch no. 25
+100%|██████████████████████████████████████| 7500/7500 [01:04<00:00, 116.80it/s]
+The loss of the generator is 1.3447666287342708 and the loss of the discriminator is 0.4912468390027682 for epoch no. 26
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 126.33it/s]
+The loss of the generator is 1.352231823794047 and the loss of the discriminator is 0.48821544895768165 for epoch no. 27
+100%|██████████████████████████████████████| 7500/7500 [01:06<00:00, 113.23it/s]
+The loss of the generator is 1.356607611099879 and the loss of the discriminator is 0.4878722736895084 for epoch no. 28
+100%|██████████████████████████████████████| 7500/7500 [01:06<00:00, 112.25it/s]
+The loss of the generator is 1.380652589448293 and the loss of the discriminator is 0.481833881020546 for epoch no. 29
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 129.51it/s]
+The loss of the generator is 1.3833008072455724 and the loss of the discriminator is 0.4849876313428084 for epoch no. 30
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 119.16it/s]
+The loss of the generator is 1.384545905148983 and the loss of the discriminator is 0.4817362992922465 for epoch no. 31
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 123.00it/s]
+The loss of the generator is 1.3982922522783279 and the loss of the discriminator is 0.48203530879219375 for epoch no. 32
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.74it/s]
+The loss of the generator is 1.3970842179218927 and the loss of the discriminator is 0.47691912466684977 for epoch no. 33
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.86it/s]
+The loss of the generator is 1.4086048237164814 and the loss of the discriminator is 0.47342868323524795 for epoch no. 34
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.51it/s]
+The loss of the generator is 1.4087716834863027 and the loss of the discriminator is 0.4745246569176515 for epoch no. 35
+100%|██████████████████████████████████████| 7500/7500 [01:04<00:00, 116.71it/s]
+The loss of the generator is 1.4123966741085052 and the loss of the discriminator is 0.4751130854646365 for epoch no. 36
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 122.25it/s]
+The loss of the generator is 1.4138947369098662 and the loss of the discriminator is 0.4718892401556174 for epoch no. 37
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.32it/s]
+The loss of the generator is 1.4277151869773865 and the loss of the discriminator is 0.4683005988140901 for epoch no. 38
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.62it/s]
+The loss of the generator is 1.4392508020798365 and the loss of the discriminator is 0.4654029755691687 for epoch no. 39
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 129.76it/s]
+The loss of the generator is 1.4515660890301068 and the loss of the discriminator is 0.4627250120957693 for epoch no. 40
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 130.35it/s]
+The loss of the generator is 1.457881992260615 and the loss of the discriminator is 0.45995815758307773 for epoch no. 41
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 124.13it/s]
+The loss of the generator is 1.4636691196918488 and the loss of the discriminator is 0.45785963292916615 for epoch no. 42
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.03it/s]
+The loss of the generator is 1.4680436993281047 and the loss of the discriminator is 0.4550819007674853 for epoch no. 43
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.58it/s]
+The loss of the generator is 1.4754146634340286 and the loss of the discriminator is 0.45232204592923325 for epoch no. 44
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.64it/s]
+The loss of the generator is 1.475346923160553 and the loss of the discriminator is 0.4537523280183474 for epoch no. 45
+100%|██████████████████████████████████████| 7500/7500 [00:56<00:00, 131.69it/s]
+The loss of the generator is 1.4879361923058827 and the loss of the discriminator is 0.44902903330028054 for epoch no. 46
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 131.06it/s]
+The loss of the generator is 1.5001301088094712 and the loss of the discriminator is 0.4486100006024043 for epoch no. 47
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 129.76it/s]
+The loss of the generator is 1.5140890470822652 and the loss of the discriminator is 0.44590251096387706 for epoch no. 48
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.51it/s]
+The loss of the generator is 1.5200023344198863 and the loss of the discriminator is 0.4452118335912625 for epoch no. 49
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 135.52it/s]
+The loss of the generator is 1.529202144964536 and the loss of the discriminator is 0.441172898242871 for epoch no. 50
+100%|██████████████████████████████████████| 7500/7500 [00:56<00:00, 131.85it/s]
+The loss of the generator is 1.5417218932787577 and the loss of the discriminator is 0.44079831592241925 for epoch no. 51
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 130.54it/s]
+The loss of the generator is 1.5450372680902482 and the loss of the discriminator is 0.438084713045756 for epoch no. 52
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 131.10it/s]
+The loss of the generator is 1.547838462495804 and the loss of the discriminator is 0.4374821850866079 for epoch no. 53
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 117.20it/s]
+The loss of the generator is 1.5596253743171693 and the loss of the discriminator is 0.43321746767858665 for epoch no. 54
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.41it/s]
+The loss of the generator is 1.5817802943706512 and the loss of the discriminator is 0.43068718571960923 for epoch no. 55
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.45it/s]
+The loss of the generator is 1.600792474635442 and the loss of the discriminator is 0.4261715948581696 for epoch no. 56
+100%|██████████████████████████████████████| 7500/7500 [00:58<00:00, 128.12it/s]
+The loss of the generator is 1.610085456776619 and the loss of the discriminator is 0.4231677848368883 for epoch no. 57
+100%|██████████████████████████████████████| 7500/7500 [01:05<00:00, 115.23it/s]
+The loss of the generator is 1.6232372469345728 and the loss of the discriminator is 0.41974101463158925 for epoch no. 58
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 135.92it/s]
+The loss of the generator is 1.6365379941860834 and the loss of the discriminator is 0.41739082492937646 for epoch no. 59
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 119.81it/s]
+The loss of the generator is 1.640127845509847 and the loss of the discriminator is 0.41506949488818645 for epoch no. 60
+100%|██████████████████████████████████████| 7500/7500 [00:56<00:00, 133.41it/s]
+The loss of the generator is 1.6582821447372436 and the loss of the discriminator is 0.4107100145469109 for epoch no. 61
+100%|██████████████████████████████████████| 7500/7500 [01:05<00:00, 115.35it/s]
+The loss of the generator is 1.6758290242989857 and the loss of the discriminator is 0.40788027438720065 for epoch no. 62
+100%|██████████████████████████████████████| 7500/7500 [00:58<00:00, 128.72it/s]
+The loss of the generator is 1.6836436203797658 and the loss of the discriminator is 0.4083612099468708 for epoch no. 63
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 130.36it/s]
+The loss of the generator is 1.6880132103045782 and the loss of the discriminator is 0.40389873997469744 for epoch no. 64
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 118.55it/s]
+The loss of the generator is 1.7215017199834188 and the loss of the discriminator is 0.3987780077467362 for epoch no. 65
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 117.34it/s]
+The loss of the generator is 1.729033222746849 and the loss of the discriminator is 0.39595081393470366 for epoch no. 66
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 122.29it/s]
+The loss of the generator is 1.7486646805206936 and the loss of the discriminator is 0.3935047911485036 for epoch no. 67
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.52it/s]
+The loss of the generator is 1.7609249968449274 and the loss of the discriminator is 0.3917762087970972 for epoch no. 68
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 126.94it/s]
+The loss of the generator is 1.76201209072272 and the loss of the discriminator is 0.3894652759770552 for epoch no. 69
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 124.51it/s]
+The loss of the generator is 1.7595136334816615 and the loss of the discriminator is 0.3884971875568231 for epoch no. 70
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 118.99it/s]
+The loss of the generator is 1.7896495345671972 and the loss of the discriminator is 0.3862857325270772 for epoch no. 71
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.42it/s]
+The loss of the generator is 1.792212891848882 and the loss of the discriminator is 0.38301892315149305 for epoch no. 72
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 122.13it/s]
+The loss of the generator is 1.8102141749620437 and the loss of the discriminator is 0.37860998149017494 for epoch no. 73
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 131.48it/s]
+The loss of the generator is 1.8186598585605622 and the loss of the discriminator is 0.37786719818909964 for epoch no. 74
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.11it/s]
+The loss of the generator is 1.830243845653534 and the loss of the discriminator is 0.3753458795090516 for epoch no. 75
+100%|██████████████████████████████████████| 7500/7500 [00:56<00:00, 132.98it/s]
+The loss of the generator is 1.8528685839732488 and the loss of the discriminator is 0.3720533043419321 for epoch no. 76
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 126.88it/s]
+The loss of the generator is 1.850100316341718 and the loss of the discriminator is 0.371671281449 for epoch no. 77
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 127.03it/s]
+The loss of the generator is 1.8650282093048096 and the loss of the discriminator is 0.36718521316051483 for epoch no. 78
+100%|██████████████████████████████████████| 7500/7500 [01:06<00:00, 113.42it/s]
+The loss of the generator is 1.8794205960830053 and the loss of the discriminator is 0.364304850393037 for epoch no. 79
+100%|██████████████████████████████████████| 7500/7500 [01:04<00:00, 116.27it/s]
+The loss of the generator is 1.87850846713384 and the loss of the discriminator is 0.3659151281600197 for epoch no. 80
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 124.06it/s]
+The loss of the generator is 1.8920131955305735 and the loss of the discriminator is 0.36419222827156383 for epoch no. 81
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 122.30it/s]
+The loss of the generator is 1.9006360793828965 and the loss of the discriminator is 0.3604074394136667 for epoch no. 82
+100%|██████████████████████████████████████| 7500/7500 [01:00<00:00, 124.24it/s]
+The loss of the generator is 1.9148243562698364 and the loss of the discriminator is 0.35959473802099623 for epoch no. 83
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 118.83it/s]
+The loss of the generator is 1.9080217674811681 and the loss of the discriminator is 0.3568585446645816 for epoch no. 84
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.62it/s]
+The loss of the generator is 1.9511142941713333 and the loss of the discriminator is 0.3491086880808075 for epoch no. 85
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 121.00it/s]
+The loss of the generator is 1.9435252670526504 and the loss of the discriminator is 0.35023656117121377 for epoch no. 86
+100%|██████████████████████████████████████| 7500/7500 [00:56<00:00, 132.31it/s]
+The loss of the generator is 1.9520192545811335 and the loss of the discriminator is 0.34885378631651404 for epoch no. 87
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 135.35it/s]
+The loss of the generator is 1.951125930094719 and the loss of the discriminator is 0.34777266108840704 for epoch no. 88
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 134.60it/s]
+The loss of the generator is 1.9553985031604766 and the loss of the discriminator is 0.34583547465205194 for epoch no. 89
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 134.42it/s]
+The loss of the generator is 2.003810938445727 and the loss of the discriminator is 0.34048460279355447 for epoch no. 90
+100%|██████████████████████████████████████| 7500/7500 [00:55<00:00, 134.45it/s]
+The loss of the generator is 2.001476985144615 and the loss of the discriminator is 0.3425833393931389 for epoch no. 91
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 127.08it/s]
+The loss of the generator is 2.0188280039230984 and the loss of the discriminator is 0.3424128820920984 for epoch no. 92
+100%|██████████████████████████████████████| 7500/7500 [01:03<00:00, 117.87it/s]
+The loss of the generator is 2.0049228576898575 and the loss of the discriminator is 0.341562422973911 for epoch no. 93
+100%|██████████████████████████████████████| 7500/7500 [00:57<00:00, 130.60it/s]
+The loss of the generator is 2.0358707010746 and the loss of the discriminator is 0.33582460681001347 for epoch no. 94
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 126.23it/s]
+The loss of the generator is 2.040239602327347 and the loss of the discriminator is 0.3313749777823687 for epoch no. 95
+100%|██████████████████████████████████████| 7500/7500 [01:02<00:00, 120.42it/s]
+The loss of the generator is 2.0395825368324916 and the loss of the discriminator is 0.3356769933909178 for epoch no. 96
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.25it/s]
+The loss of the generator is 2.0324222162644068 and the loss of the discriminator is 0.33539002809176843 for epoch no. 97
+100%|██████████████████████████████████████| 7500/7500 [00:59<00:00, 125.91it/s]
+The loss of the generator is 2.0395830604791643 and the loss of the discriminator is 0.3319565206875404 for epoch no. 98
+100%|██████████████████████████████████████| 7500/7500 [01:01<00:00, 122.74it/s]
+The loss of the generator is 2.0343147598346074 and the loss of the discriminator is 0.33248908633291724 for epoch no. 99
+
