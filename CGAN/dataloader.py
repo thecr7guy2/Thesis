@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 def getdata():
     trans = transforms.Compose([transforms.Resize((28, 28)), transforms.ToTensor()])
 
-    mnist_train = datasets.KMNIST(root='./data', train=True, download=True, transform=trans)
+    mnist_train = datasets.MNIST(root='./data', train=True, download=True, transform=trans)
 
-    mnist_test = datasets.KMNIST(root='./data', train=False, download=True, transform=trans)
+    mnist_test = datasets.MNIST(root='./data', train=False, download=True, transform=trans)
 
     train_dataloader = DataLoader(mnist_train, batch_size=8, shuffle=True)
 

@@ -9,12 +9,14 @@ from torchvision.utils import save_image
 
 ### CHANGE HERE ####
 ####################
-learning_rate = 0.00005
-num_epochs = 5
+learning_rate = 0.00000325
+num_epochs = 8
 noise_dim = 16
-gen_hidden_dim = 64
+gen_hidden_dim = 32
 dis_hidden_dim = 16
 image_dim = 1
+beta_1 = 0.5
+beta_2 = 0.999
 ####################
 
 
@@ -92,8 +94,8 @@ dis_model = discriminator(up_image_dim, dis_hidden_dim).to(device)
 
 criterion = nn.BCEWithLogitsLoss()
 
-gen_opt = torch.optim.Adam(gen_model.parameters(), lr=learning_rate)
-dis_opt = torch.optim.Adam(dis_model.parameters(), lr=learning_rate)
+gen_opt = torch.optim.Adam(gen_model.parameters(), lr=learning_rate, betas=(beta_1, beta_2))
+dis_opt = torch.optim.Adam(dis_model.parameters(), lr=learning_rate, betas=(beta_1, beta_2))
 
 gen_model.apply(weights_init)
 dis_model.apply(weights_init)

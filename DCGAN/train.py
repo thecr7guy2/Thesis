@@ -21,11 +21,11 @@ beta_1 = 0.5
 beta_2 = 0.999
 #####################
 
-def check_gen_images(gen, noise_dim, device, epoch):
+def check_gen_images(gen, noise_dim, batch_size, device, epoch):
     gen_model.eval()
     dis_model.eval()
     with torch.no_grad():
-        noise_vec = torch.randn(8 , noise_dim, device=device)
+        noise_vec = torch.randn(batch_size, noise_dim, device=device)
         gen_image = gen(noise_vec)
         save_image(gen_image.view(gen_image.size(0), 1, 28, 28), 'gen_images/sample_' + str(epoch) + '.png')
 
