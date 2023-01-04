@@ -7,7 +7,7 @@ class discriminator(nn.Module):
         self.dis = nn.Sequential(
             self.dis_block(im_dim, hidden_dim, 4, 2, final_layer=False),
             self.dis_block(hidden_dim, hidden_dim * 2, 4, 2, final_layer=False),
-            self.dis_block(hidden_dim * 2, 1, 4, 2, final_layer=True),
+            self.dis_block(hidden_dim * 4, 1, 4, 2, final_layer=True),
         )
 
     @staticmethod
