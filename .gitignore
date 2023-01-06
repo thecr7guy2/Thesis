@@ -1,4 +1,6 @@
 *.gz
 *.jpg
 *.png
-
+*.xml
+*.pyc
+*.iml
