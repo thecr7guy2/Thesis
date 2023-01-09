@@ -1,12 +1,12 @@
 from PIL import Image
-from torchvision import datasets, transforms
+from torchvision import datasets, transforms, utils
 from torch.utils.data import DataLoader, Dataset
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-class Animefaces(Dataset):
+class dogs(Dataset):
     def __init__(self, data_dir, transform):
         self.data_dir = data_dir
         self.transform = transform
@@ -26,25 +26,27 @@ class Animefaces(Dataset):
 
 
 def get_loader(data_dir, transform, batch_size, shuffle):
-    anime_dataset = Animefaces(data_dir, transform)
+    anime_dataset = dogs(data_dir, transform)
     anime_loader = DataLoader(anime_dataset, batch_size=batch_size, shuffle=shuffle)
     return anime_loader
 
 
-# anime_transform = transforms.Compose([
-#     transforms.Resize((64, 64)),
-#     transforms.ToTensor(),
-#     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-# ])
-# data_loader = get_loader("data/images", anime_transform, 16, shuffle=False)
-# images = next(iter(data_loader))
+anime_transform = transforms.Compose([
+    transforms.Resize((64, 64)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
+data_loader = get_loader("data/images", anime_transform, 64, shuffle=False)
+images = next(iter(data_loader))
 # rows = 4
 # columns = 4
 # print(images.shape)
 # print(images[0].max())
-# # fig, ax = plt.subplots(4, 4, figsize=(30, 20))
-# # ax = ax.ravel()
-# # for i in range(0, 16):
-# #     ax[i].imshow(images[i].numpy().transpose((1, 2, 0)))
-# # plt.show()
-#plt.imshow(np.transpose(vutils.make_grid(real_batch[0].to(device)[:64], padding=2, normalize=True).cpu(),(1,2,0)))
+# fig, ax = plt.subplots(4, 4, figsize=(30, 20))
+# ax = ax.ravel()
+# for i in range(0, 16):
+#     ax[i].imshow(images[i].numpy().transpose((1, 2, 0)))
+# plt.show()
+#########################
+plt.imshow(np.transpose(utils.make_grid(images[:64], padding=2, normalize=True), (1, 2, 0)))
+plt.show()

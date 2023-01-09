@@ -8,17 +8,19 @@ class discriminator(nn.Module):
     def __init__(self, im_dim, hidden_dim):
         super(discriminator, self).__init__()
         self.dis = nn.Sequential(
-            self.dis_block(im_dim, hidden_dim, 4, 2, final_layer=False),
-            self.dis_block(hidden_dim, hidden_dim * 2, 4, 2, final_layer=False),
-            self.dis_block(hidden_dim * 2, 1, 4, 2, final_layer=True),
+            self.dis_block(im_dim, hidden_dim, 4, 2, 1, final_layer=False),
+            self.dis_block(hidden_dim, hidden_dim * 2, 4, 2, 1, final_layer=False),
+            self.dis_block(hidden_dim * 2, hidden_dim * 4, 4, 2, 1, final_layer=False),
+            self.dis_block(hidden_dim * 4, hidden_dim * 8, 4, 2, 1, final_layer=False),
+            self.dis_block(hidden_dim * 8, 1, 4, 2, 0, final_layer=True),
         )
 
     @staticmethod
-    def dis_block(input_channels, output_channels, kernel_size, stride, final_layer=False):
+    def dis_block(input_channels, output_channels, kernel_size, stride, padding, final_layer=False):
 
         if final_layer == False:
             block = nn.Sequential(
-                nn.Conv2d(input_channels, output_channels, kernel_size, stride),
+                nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding, bias=False),
                 nn.BatchNorm2d(output_channels),
                 nn.LeakyReLU(negative_slope=0.2, inplace=True)
             )
@@ -70,14 +72,14 @@ def dis_loss(gen, disc, criterion, real_im, noise_dim, device):
     return loss
 
 
-batch_size = 2
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-dis = discriminator(1, 16).to(device)
-images = torch.normal(0, 1, size=(batch_size, 1, 28, 28)).to(device)
-print(images.shape)
-# images = images.view(batch_size, -1).to(device)
+# batch_size = 2
+# device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# dis = discriminator(1, 16).to(device)
+# images = torch.normal(0, 1, size=(batch_size, 1, 28, 28)).to(device)
 # print(images.shape)
-print("########################")
-pred = dis(images)
-print(pred.shape)
-print(pred)
+# # images = images.view(batch_size, -1).to(device)
+# # print(images.shape)
+# print("########################")
+# pred = dis(images)
+# print(pred.shape)
+# print(pred)

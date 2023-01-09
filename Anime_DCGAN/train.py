@@ -2,23 +2,25 @@ import torch
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import numpy as np
-from dataloader import getdata
+from dataloader import get_loader
 from modules.generator import generator, gen_loss
 from modules.discriminator import discriminator, dis_loss
 from tqdm import tqdm
 from torchvision.utils import save_image
+from torchvision import transforms
 
 ###### PARAMS ######
 ### CHANGE HERE ####
 ####################
-learning_rate = 0.00005
-num_epochs = 8
-noise_dim = 16
+learning_rate = 1e-4
+num_epochs = 25
+noise_dim = 100
 gen_hidden_dim = 64
-dis_hidden_dim = 16
-image_dim = 1
-beta_1 = 0.5
+dis_hidden_dim = 64
+image_dim = 3
+beta_1 = 0.01
 beta_2 = 0.999
+batch_size = 64
 #####################
 
 def check_gen_images(gen, noise_dim, batch_size, device, epoch):
@@ -27,10 +29,17 @@ def check_gen_images(gen, noise_dim, batch_size, device, epoch):
     with torch.no_grad():
         noise_vec = torch.randn(batch_size, noise_dim, device=device)
         gen_image = gen(noise_vec)
-        save_image(gen_image.view(gen_image.size(0), 1, 28, 28), 'gen_images/sample_' + str(epoch) + '.png')
+        save_image(gen_image.view(gen_image.size(0), 3, 64,64), 'gen_images/sample_' + str(epoch) + '.png')
 
     gen_model.train()
     dis_model.train()
+
+
+anime_transform = transforms.Compose([
+    transforms.Resize((64, 64)),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+])
 
 
 def weights_init(m):
@@ -43,7 +52,7 @@ def weights_init(m):
 
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
-train_loader, test_loader = getdata()
+train_loader = get_loader("data/images", anime_transform, batch_size, shuffle=True)
 
 gen_model = generator(noise_dim, gen_hidden_dim, image_dim).to(device)
 dis_model = discriminator(image_dim, dis_hidden_dim).to(device)
@@ -69,9 +78,9 @@ for epoch in range(num_epochs):
     gen_model.train()
     dis_model.train()
 
-    for batch_index, (img, label) in enumerate(loop):
+    for batch_index, (img) in enumerate(loop):
         batch_size = len(img)
-
+        #print(img.shape)
         # img_flatten = img.view(batch_size, -1).to(device)
         img = img.to(device)
 
@@ -107,6 +116,6 @@ for epoch in range(num_epochs):
         epoch_gen_loss, epoch_dis_loss, epoch))
 
 with torch.no_grad():
-    noise_vec = torch.randn(batch_size*2, noise_dim, device=device)
+    noise_vec = torch.randn(batch_size * 2, noise_dim, device=device)
     gen_image = gen_model(noise_vec)
-    save_image(gen_image.view(batch_size * 2, 1, 28, 28), 'gen_images/final_image.png')
+    save_image(gen_image.view(batch_size * 2, 3,64,64), 'gen_images/final_image.png')
