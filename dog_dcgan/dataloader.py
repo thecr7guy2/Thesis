@@ -27,17 +27,17 @@ class dogs(Dataset):
 
 def get_loader(data_dir, transform, batch_size, shuffle):
     anime_dataset = dogs(data_dir, transform)
-    anime_loader = DataLoader(anime_dataset, batch_size=batch_size, shuffle=shuffle)
+    anime_loader = DataLoader(anime_dataset, batch_size=batch_size, shuffle=shuffle,num_workers=3)
     return anime_loader
 
 
-anime_transform = transforms.Compose([
-    transforms.Resize((64, 64)),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-])
-data_loader = get_loader("data/images", anime_transform, 64, shuffle=False)
-images = next(iter(data_loader))
+# anime_transform = transforms.Compose([
+#     transforms.Resize((64, 64)),
+#     transforms.ToTensor(),
+#     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+# ])
+# data_loader = get_loader("data/images", anime_transform, 64, shuffle=False)
+# images = next(iter(data_loader))
 # rows = 4
 # columns = 4
 # print(images.shape)
@@ -48,5 +48,5 @@ images = next(iter(data_loader))
 #     ax[i].imshow(images[i].numpy().transpose((1, 2, 0)))
 # plt.show()
 #########################
-plt.imshow(np.transpose(utils.make_grid(images[:64], padding=2, normalize=True), (1, 2, 0)))
-plt.show()
+# plt.imshow(np.transpose(utils.make_grid(images[:64], padding=2, normalize=True), (1, 2, 0)))
+# plt.show()
