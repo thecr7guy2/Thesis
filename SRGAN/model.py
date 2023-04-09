@@ -47,7 +47,7 @@ class Generator(nn.Module):
             nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1),
             nn.BatchNorm2d(64)
         )
-        self.block4 = nn.Sequential(Upsample_block(64, 4), Upsample_block(64, 2))
+        self.block4 = nn.Sequential(Upsample_block(64, 2), Upsample_block(64, 2))
         self.block5 = nn.Conv2d(64, 3, kernel_size=9, stride=1, padding=4)
 
     def forward(self, x):

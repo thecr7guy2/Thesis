@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #######################
-hr_size = 192
-upscale_factor = 8
+hr_size = 96
+upscale_factor = 4
 ######################
 primary_transform = A.Compose(
     [

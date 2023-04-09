@@ -9,7 +9,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class OtherLoss(nn.Module):
     def __init__(self):
         super(OtherLoss, self).__init__()
-        self.vgg = vgg19(pretrained=True).features[:35].eval().to(device)
+        self.vgg = vgg19(pretrained=True).features[:31].eval().to(device)
         for param in self.vgg.parameters():
             param.requires_grad = False
         self.mse_loss = nn.MSELoss()
