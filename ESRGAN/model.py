@@ -1,0 +1,114 @@
+import torch
+import torch.nn as nn
+from torchinfo import summary
+
+
+class RD_block(nn.Module):
+    def __init__(self, channels, growth_channels, residual_beta):
+        super(RD_block, self).__init__()
+        self.residual_beta = residual_beta
+        self.conv1 = nn.Conv2d(channels + growth_channels * 0, growth_channels, kernel_size=3,
+                               stride=1, padding=1)
+        self.conv2 = nn.Conv2d(channels + growth_channels * 1, growth_channels, kernel_size=3,
+                               stride=1, padding=1)
+        self.conv3 = nn.Conv2d(channels + growth_channels * 2, growth_channels, kernel_size=3,
+                               stride=1, padding=1)
+        self.conv4 = nn.Conv2d(channels + growth_channels * 3, growth_channels, kernel_size=3,
+                               stride=1, padding=1)
+        self.conv5 = nn.Conv2d(channels + growth_channels * 4, channels, kernel_size=3,
+                               stride=1, padding=1)
+
+        self.activation = nn.LeakyReLU(0.2, inplace=True)
+        self.identity = nn.Identity()
+
+    def forward(self, x):
+        temp = x
+        out1 = self.activation(self.conv1(x))
+        out2 = self.activation(self.conv2(torch.cat([x, out1], 1)))
+        out3 = self.activation(self.conv3(torch.cat([x, out1, out2, ], 1)))
+        out4 = self.activation(self.conv4(torch.cat([x, out1, out2, out3, ], 1)))
+        out5 = self.identity(self.conv5(torch.cat([x, out1, out2, out3, out4], 1)))
+        out6 = torch.mul(out5, self.residual_beta)
+        out = torch.add(out6, temp)
+        return out
+
+
+class RRD_block(nn.Module):
+    def __init__(self, channels, growth_channels, residual_beta):
+        self.residual_beta = residual_beta
+        super(RRD_block, self).__init__()
+        self.block1 = RD_block(channels, growth_channels, residual_beta)
+        self.block2 = RD_block(channels, growth_channels, residual_beta)
+        self.block3 = RD_block(channels, growth_channels, residual_beta)
+
+    def forward(self, x):
+        out1 = self.block1(x)
+        out2 = self.block2(out1)
+        out3 = self.block3(out2)
+        out4 = torch.mul(out3, self.residual_beta)
+        out = torch.add(out4, x)
+        return out
+
+
+class UpsampleBlock(nn.Module):
+    def __init__(self, in_c, upscale_factor):
+        super(UpsampleBlock, self).__init__()
+        self.upsample = nn.Upsample(scale_factor=upscale_factor, mode="nearest")
+        self.conv = nn.Conv2d(in_c, in_c, 3, 1, 1, bias=True)
+        self.act = nn.LeakyReLU(0.2, inplace=True)
+
+    def forward(self, x):
+        return self.act(self.conv(self.upsample(x)))
+
+
+class RRDBNet(nn.Module):
+    def __init__(self, in_channels, out_channels, channels, growth_channels, upscale_factor, residual_beta):
+        super(RRDBNet, self).__init__()
+        self.conv1 = nn.Conv2d(in_channels, channels, kernel_size=3,
+                               stride=1, padding=1)
+        self.res_block = nn.Sequential(*[RRD_block(channels, growth_channels, residual_beta) for _ in range(23)])
+
+        self.conv2 = nn.Conv2d(channels, channels, kernel_size=3,
+                               stride=1, padding=1)
+
+        self.upsample = nn.Sequential(
+            UpsampleBlock(channels, upscale_factor), UpsampleBlock(channels, upscale_factor),
+        )
+
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(channels, channels, (3, 3), (1, 1), (1, 1)),
+            nn.LeakyReLU(0.2, True)
+        )
+
+        self.conv4 = nn.Conv2d(channels, out_channels, (3, 3), (1, 1), (1, 1))
+
+    def forward(self, x):
+        temp = x
+        out1 = self.conv1(x)
+        out2 = self.conv2(self.res_block(out1))
+        out3 = torch.add(out2, out1)
+        out4 = self.upsample(out3)
+        out5 = self.conv3(out4)
+        out = self.conv4(out5)
+
+        out = torch.clamp_(out, 0.0, 1.0)
+        return out
+
+
+#############################################
+def weights_init(m):
+    if isinstance(m, nn.Conv2d):
+        nn.init.kaiming_normal_(m.weight)
+        m.weight.data *= 0.1
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
+
+
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+#
+# gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
+# gen_opt = torch.optim.Adam(gen.parameters(), lr=1e-4, betas=(0.9, 0.999))
+# gen_model = gen.apply(weights_init)
+# # summary(gen, input_size=(16, 3, 64, 64))
+
+#############################################

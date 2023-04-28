@@ -69,7 +69,7 @@ def get_loader(hr_data_dir, batch_size, shuffle):
     return d_loader
 
 
-# data_loader = get_loader("data/HR/DIV2K_valid_HR", 16, False)
+# data_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 16, False)
 # for high_res, low_res, in data_loader:
 #     print(low_res.shape)
 #     print(high_res.shape)

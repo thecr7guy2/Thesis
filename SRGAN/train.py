@@ -4,9 +4,6 @@ from torch import nn
 from loss import OtherLoss
 from model import Generator, Discriminator
 from dataloader import get_loader
-import numpy as np
-from torchvision import datasets, transforms, utils
-import matplotlib.pyplot as plt
 from torchmetrics import PeakSignalNoiseRatio
 from torchmetrics import StructuralSimilarityIndexMeasure
 
@@ -21,11 +18,13 @@ def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
 
 
 def weights_init(m):
-    if isinstance(m, nn.Conv2d) or isinstance(m, nn.ConvTranspose2d):
-        torch.nn.init.normal_(m.weight, 0.0, 0.02)
+    if isinstance(m, nn.Conv2d):
+        nn.init.kaiming_normal_(m.weight)
+        m.weight.data *= 0.1
+        if m.bias is not None:
+            nn.init.constant_(m.bias, 0)
     if isinstance(m, nn.BatchNorm2d):
         torch.nn.init.normal_(m.weight, 0.0, 0.02)
-        torch.nn.init.constant_(m.bias, 0)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -36,23 +35,22 @@ val_loader = get_loader("data/HR/DIV2K_valid_HR", 16, False)
 gen_model = Generator().to(device)
 dis_model = Discriminator().to(device)
 bce_criterion = nn.BCEWithLogitsLoss()
-psnr = PeakSignalNoiseRatio(data_range=1.0)
-ssim = StructuralSimilarityIndexMeasure(data_range=1.0)
+psnr = PeakSignalNoiseRatio(data_range=1.0).to(device)
+ssim = StructuralSimilarityIndexMeasure(data_range=1.0).to(device)
 other_loss_crit = OtherLoss()
 
 gen_opt = torch.optim.Adam(gen_model.parameters(), lr=1e-4, betas=(0.9, 0.999))
 
-dis_opt = torch.optim.Adam(dis_model.parameters(), lr=1e-4, betas=(0.9, 0.999))
+dis_opt = torch.optim.Adam(dis_model.parameters(), lr=4e-4, betas=(0.9, 0.999))
 
 gen_model = gen_model.apply(weights_init)
 disc_model = dis_model.apply(weights_init)
 
-for epoch in range(60):
+for epoch in range(300):
     running_gen_loss = 0
     running_dis_loss = 0
     running_psnr = 0
     running_ssim = 0
-    best_score = 0
 
     loop = tqdm(train_loader)
     gen_model.train()
@@ -89,7 +87,12 @@ for epoch in range(60):
 
     epoch_gen_loss = running_gen_loss / len(train_loader)
     epoch_dis_loss = running_dis_loss / len(train_loader)
-    loop.set_description(desc='[{}/{}] Loss_D: {} Loss_G: {}'.format(epoch, 60, epoch_dis_loss, epoch_gen_loss))
+    with open("train_log.txt", "a") as f:
+        f.write('[{}/{}] Loss_D: {} Loss_G: {}\n'.format(epoch, 300, epoch_dis_loss, epoch_gen_loss))
+    f.close()
+
+    if epoch % 2 == 0:
+        save_checkpoint(gen_model, gen_opt, filename="models/gen" + str(epoch) + ".pth.tar")
 
     gen_model.eval()
 
@@ -99,6 +102,7 @@ for epoch in range(60):
             hr_image = hr_image.to(device)
             lr_image = lr_image.to(device)
             sr_image = gen_model(lr_image)
+
             p_score = psnr(sr_image, hr_image)
             s_score = ssim(sr_image, hr_image)
             running_psnr = running_psnr + p_score.item()
@@ -106,8 +110,6 @@ for epoch in range(60):
         epoch_psnr = running_psnr / len(val_loader)
         epoch_ssim = running_ssim / len(val_loader)
 
-        val_loop.set_description(desc='[{}/{}] SSIM: {} PSNR: {}'.format(epoch, 60, epoch_ssim, epoch_psnr))
-        if epoch_psnr > best_score:
-            best_score = epoch_psnr
-
-
+    with open("train_log.txt", "a") as f:
+        f.write('[{}/{}] SSIM: {} PSNR: {}\n'.format(epoch, 300, epoch_ssim, epoch_psnr))
+    f.close()

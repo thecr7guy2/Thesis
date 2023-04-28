@@ -2,118 +2,115 @@ import torch
 from torch import nn
 from torchinfo import summary
 
-
-class Residual_block(nn.Module):
-    def __init__(self, channels):
-        super(Residual_block, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
-        self.bn1 = nn.BatchNorm2d(channels)
-        self.act = nn.PReLU(num_parameters=channels)
-        self.conv2 = nn.Conv2d(in_channels=channels, out_channels=channels, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2d(channels)
-
-    def forward(self, x):
-        res = self.conv1(x)
-        res = self.bn1(res)
-        res = self.act(res)
-        res = self.conv2(res)
-        res = self.bn2(res)
-        return x + res
-
-
-class Upsample_block(nn.Module):
-    def __init__(self, channels, upscale):
-        super(Upsample_block, self).__init__()
-        self.conv1 = nn.Conv2d(channels, channels * upscale ** 2, kernel_size=3, stride=1, padding=1)
-        self.pshuff = nn.PixelShuffle(upscale)
-        self.act = nn.PReLU(num_parameters=channels)
+class ConvBlock(nn.Module):
+    def __init__(
+        self,
+        in_channels,
+        out_channels,
+        discriminator=False,
+        use_act=True,
+        use_bn=True,
+        **kwargs,
+    ):
+        super().__init__()
+        self.use_act = use_act
+        self.cnn = nn.Conv2d(in_channels, out_channels, **kwargs, bias=not use_bn)
+        self.bn = nn.BatchNorm2d(out_channels) if use_bn else nn.Identity()
+        self.act = (
+            nn.LeakyReLU(0.2, inplace=True)
+            if discriminator
+            else nn.PReLU(num_parameters=out_channels)
+        )
 
     def forward(self, x):
-        up = self.conv1(x)
-        up = self.pshuff(up)
-        up = self.act(up)
-        return up
+        return self.act(self.bn(self.cnn(x))) if self.use_act else self.bn(self.cnn(x))
+
+
+class UpsampleBlock(nn.Module):
+    def __init__(self, in_c, scale_factor):
+        super().__init__()
+        self.conv = nn.Conv2d(in_c, in_c * scale_factor ** 2, 3, 1, 1)
+        self.ps = nn.PixelShuffle(scale_factor)  # in_c * 4, H, W --> in_c, H*2, W*2
+        self.act = nn.PReLU(num_parameters=in_c)
+
+    def forward(self, x):
+        return self.act(self.ps(self.conv(x)))
+
+
+class ResidualBlock(nn.Module):
+    def __init__(self, in_channels):
+        super().__init__()
+        self.block1 = ConvBlock(
+            in_channels,
+            in_channels,
+            kernel_size=3,
+            stride=1,
+            padding=1
+        )
+        self.block2 = ConvBlock(
+            in_channels,
+            in_channels,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+            use_act=False,
+        )
+
+    def forward(self, x):
+        out = self.block1(x)
+        out = self.block2(out)
+        return out + x
 
 
 class Generator(nn.Module):
-    def __init__(self):
-        super(Generator, self).__init__()
-        self.block1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=9, stride=1, padding=4),
-            nn.PReLU(num_parameters=64)
-        )
-        self.block2 = nn.Sequential(*[Residual_block(64) for _ in range(16)])
-        self.block3 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64)
-        )
-        self.block4 = nn.Sequential(Upsample_block(64, 2), Upsample_block(64, 2))
-        self.block5 = nn.Conv2d(64, 3, kernel_size=9, stride=1, padding=4)
+    def __init__(self, in_channels=3, num_channels=64, num_blocks=16):
+        super().__init__()
+        self.initial = ConvBlock(in_channels, num_channels, kernel_size=9, stride=1, padding=4, use_bn=False)
+        self.residuals = nn.Sequential(*[ResidualBlock(num_channels) for _ in range(num_blocks)])
+        self.convblock = ConvBlock(num_channels, num_channels, kernel_size=3, stride=1, padding=1, use_act=False)
+        self.upsamples = nn.Sequential(UpsampleBlock(num_channels, 2), UpsampleBlock(num_channels, 2))
+        self.final = nn.Conv2d(num_channels, in_channels, kernel_size=9, stride=1, padding=4)
 
     def forward(self, x):
-        block1 = self.block1(x)
-        block2 = self.block2(block1)
-        block3 = self.block3(block2) + block1
-        block4 = self.block4(block3)
-        block5 = self.block5(block4)
-
-        return torch.tanh(block5)
+        initial = self.initial(x)
+        x = self.residuals(initial)
+        x = self.convblock(x) + initial
+        x = self.upsamples(x)
+        return torch.tanh(self.final(x))
 
 
 class Discriminator(nn.Module):
-    def __init__(self):
-        super(Discriminator, self).__init__()
-        self.disc = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, padding=1),
-            nn.LeakyReLU(negative_slope=0.2),
+    def __init__(self, in_channels=3, features=[64, 64, 128, 128, 256, 256, 512, 512]):
+        super().__init__()
+        blocks = []
+        for idx, feature in enumerate(features):
+            blocks.append(
+                ConvBlock(
+                    in_channels,
+                    feature,
+                    kernel_size=3,
+                    stride=1 + idx % 2,
+                    padding=1,
+                    discriminator=True,
+                    use_act=True,
+                    use_bn=False if idx == 0 else True,
+                )
+            )
+            in_channels = feature
 
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(64),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(128),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(256),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, padding=1),
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(negative_slope=0.2),
-
-            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=2, padding=1),
-            nn.BatchNorm2d(512),
-            nn.LeakyReLU(negative_slope=0.2),
-
+        self.blocks = nn.Sequential(*blocks)
+        self.classifier = nn.Sequential(
             nn.AdaptiveAvgPool2d((6, 6)),
             nn.Flatten(),
-            nn.Linear(512 * 6 * 6, 1024),
+            nn.Linear(512*6*6, 1024),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Linear(1024, 1),
-
         )
 
     def forward(self, x):
-        return self.disc(x)
+        x = self.blocks(x)
+        return self.classifier(x)
 
 
-# ############################
-# x = torch.randn((5, 3, 24, 24))
-# gen = Generator()
-# summary(gen, input_size=(16, 3, 24, 24))
-# gen_out = gen(x)
-# print(gen_out.size())
-# disc = Discriminator()
-# disc_out = disc(gen_out)
-# print(disc_out.size())
-# ##############################
+gen = Generator()
+summary(gen, input_size=(16, 3, 24, 24))
