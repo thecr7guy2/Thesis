@@ -4,3 +4,8 @@
 *.xml
 *.pyc
 *.iml
+.tar
+
+/ESRGAN/models/
+/SRGAN/models/
+/SRGAN results/
