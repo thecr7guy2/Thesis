@@ -109,6 +109,7 @@ ui = int(input('''Press 1 to load pre-trained weights.
 if ui == 1:
     curr_epoch, psnr, ssim = load_checkpoint("gen.pth.tar", gen, optimizer, scheduler)
     print("Checkpoint Loaded Successfully. Training will now Resume\n")
+    print("The last best psnr recorded was"+str(psnr))
     start = curr_epoch + 1
     best_psnr = psnr
     best_ssim = ssim
