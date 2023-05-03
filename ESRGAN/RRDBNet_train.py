@@ -20,6 +20,7 @@ def save_checkpoint(model, optimizer, scheduler, epoch, psnr, ssim, filename="my
     }
     torch.save(checkpoint, filename)
 
+
 def load_checkpoint(checkpoint_file, model, optimizer, scheduler):
     print("=> Loading checkpoint")
     checkpoint = torch.load(checkpoint_file, map_location=device)
@@ -48,7 +49,7 @@ def train_one_epoch(gen_model, loader, criterion, optimizer):
     running_loss = 0
     loop = tqdm(loader)
     gen_model.train()
-    for idx, (hr_image, lr_image) in enumerate(loop):
+    for idx, (hr_image, lr_image, c) in enumerate(loop):
         hr_image = hr_image.to(device)
         lr_image = lr_image.to(device)
         gen_model.zero_grad(set_to_none=True)
@@ -67,7 +68,7 @@ def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
     loop = tqdm(loader)
     gen_model.eval()
     with torch.no_grad():
-        for idx, (hr_image, lr_image) in enumerate(loop):
+        for idx, (hr_image, lr_image, c) in enumerate(loop):
             hr_image = hr_image.to(device)
             lr_image = lr_image.to(device)
             sr_image = gen_model(lr_image)
@@ -109,7 +110,7 @@ ui = int(input('''Press 1 to load pre-trained weights.
 if ui == 1:
     curr_epoch, psnr, ssim = load_checkpoint("gen.pth.tar", gen, optimizer, scheduler)
     print("Checkpoint Loaded Successfully. Training will now Resume\n")
-    print("The last best psnr recorded was"+str(psnr))
+    print("The last best psnr recorded was" + str(psnr))
     start = curr_epoch + 1
     best_psnr = psnr
     best_ssim = ssim
@@ -119,7 +120,6 @@ else:
     start = 0
     best_psnr = 0
     best_ssim = 0
-
 
 for epoch in range(start, epochs):
     a = train_one_epoch(gen, train_loader, l1criterion, optimizer)

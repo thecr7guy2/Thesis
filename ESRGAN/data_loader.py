@@ -60,7 +60,7 @@ class superres(Dataset):
         image = self.primary_transform(image=image)["image"]
         hr_image = self.hr_transform(image=image)["image"]
         lr_image = self.lr_transform(image=image)["image"]
-        return hr_image, lr_image
+        return hr_image, lr_image, img_name
 
 
 def get_loader(hr_data_dir, batch_size, shuffle):

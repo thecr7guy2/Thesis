@@ -14,14 +14,14 @@ class PerceptualLoss(nn.Module):
         self.feature_extractor = create_feature_extractor(vgg, ["features.34"])
         self.feature_extractor.eval()
         self.normalization = transforms.Normalize([0.485, 0.456, 0.406],[0.229, 0.224, 0.225])
-        for param in self.vgg.parameters():
+        for param in vgg.parameters():
             param.requires_grad = False
 
     def forward(self, gen_im, original_im):
         gen_im = self.normalization(gen_im)
         original_im = self.normalization(original_im)
 
-        gen_features = self.feature_extractor(gen_im)[self.feature_model_extractor_node]
-        original_features = self.feature_extractor(original_im)[self.feature_model_extractor_node]
+        gen_features = self.feature_extractor(gen_im)["features.34"]
+        original_features = self.feature_extractor(original_im)["features.34"]
 
         return F.l1_loss(gen_features, original_features)
