@@ -8,7 +8,7 @@ from torchmetrics import PeakSignalNoiseRatio
 from torchmetrics import StructuralSimilarityIndexMeasure
 import os
 
-experiment = "ESRGAN_dis1"
+experiment = "newdis"
 exp_path = os.path.join("models", experiment)
 os.mkdir(exp_path)
 
@@ -146,11 +146,11 @@ def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
         return running_psnr, running_ssim
 
 
-epochs = 100
+epochs = 200
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-train_loader = get_loader("../SRGAN/data/HR/DIV2K_train_HR", 16, True)
-val_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 16, False)
+train_loader = get_loader("../SRGAN/data/HR/DIV2K_train_HR", 256, 4, "Train", 16, True)
+val_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Valid", 16, False)
 print("Load all datasets successfully.\n")
 
 gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
@@ -231,8 +231,12 @@ for epoch in range(start, epochs):
         save_checkpoint(dis, dis_opt, dis_scheduler, epoch, best_psnr, best_ssim,
                         filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
 
-    if (epoch == epochs - 1) or (epoch % 5 == 0):
+    if (epoch == epochs - 1) or (epoch % 2 == 0):
         save_checkpoint(gen, gen_opt, gen_scheduler, epoch, best_psnr, best_ssim,
                         filename="models/" + experiment + "/gen" + str(epoch) + ".pth.tar")
+        # save_checkpoint(dis, dis_opt, dis_scheduler, epoch, best_psnr, best_ssim,
+        #                 filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
+    if epoch % 10 == 0:
         save_checkpoint(dis, dis_opt, dis_scheduler, epoch, best_psnr, best_ssim,
-                        filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
+                         filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
+

@@ -6,6 +6,11 @@ from torchmetrics import StructuralSimilarityIndexMeasure
 from data_loader import get_loader
 from model import RRDBNet
 from tqdm import tqdm
+import os
+
+experiment = "RRDB_train400"
+exp_path = os.path.join("models", experiment)
+os.mkdir(exp_path)
 
 
 def save_checkpoint(model, optimizer, scheduler, epoch, psnr, ssim, filename="my_checkpoint.pth.tar"):
@@ -49,7 +54,7 @@ def train_one_epoch(gen_model, loader, criterion, optimizer):
     running_loss = 0
     loop = tqdm(loader)
     gen_model.train()
-    for idx, (hr_image, lr_image, c) in enumerate(loop):
+    for idx, (hr_image, lr_image) in enumerate(loop):
         hr_image = hr_image.to(device)
         lr_image = lr_image.to(device)
         gen_model.zero_grad(set_to_none=True)
@@ -68,7 +73,7 @@ def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
     loop = tqdm(loader)
     gen_model.eval()
     with torch.no_grad():
-        for idx, (hr_image, lr_image, c) in enumerate(loop):
+        for idx, (hr_image, lr_image) in enumerate(loop):
             hr_image = hr_image.to(device)
             lr_image = lr_image.to(device)
             sr_image = gen_model(lr_image)
@@ -81,11 +86,11 @@ def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
         return running_psnr, running_ssim
 
 
-epochs = 300
+epochs = 350
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-train_loader = get_loader("../SRGAN/data/HR/DIV2K_train_HR", 16, True)
-val_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 16, False)
+train_loader = get_loader("../SRGAN/data/HR/DIV2K_train_HR", 256, 4, "Train", 16, True)
+val_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Valid", 16, False)
 print("Load all datasets successfully.\n")
 
 l1criterion = nn.L1Loss()
@@ -128,15 +133,15 @@ for epoch in range(start, epochs):
     epoch_psnr = b / len(val_loader)
     epoch_ssim = c / len(val_loader)
     scheduler.step()
-    with open("train_log.txt", "a") as f:
+    with open("train_log_" + experiment + ".txt", "a") as f:
         f.write('[{}/{}] The loss:{} SSIM: {} PSNR: {}\n'.format(epoch, 300, epoch_loss, epoch_ssim, epoch_psnr))
     f.close()
     if epoch_psnr > best_psnr and epoch_ssim > best_ssim:
         best_psnr = epoch_psnr
         best_ssim = epoch_ssim
         save_checkpoint(gen, optimizer, scheduler, epoch, best_psnr, best_ssim,
-                        filename="models/gen" + str(epoch) + ".pth.tar")
+                        filename="models/" + experiment + "/gen" + str(epoch) + ".pth.tar")
 
-    if epoch == epochs - 1:
+    if (epoch == epochs - 1) or (epoch % 2 == 0):
         save_checkpoint(gen, optimizer, scheduler, epoch, best_psnr, best_ssim,
-                        filename="models/gen" + str(epoch) + ".pth.tar")
+                        filename="models/" + experiment + "/gen" + str(epoch) + ".pth.tar")

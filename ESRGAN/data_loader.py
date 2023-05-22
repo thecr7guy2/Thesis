@@ -1,79 +1,57 @@
-from PIL import Image
-from PIL.Image import Resampling
+import cv2
+import improc
 from torchvision import datasets, transforms, utils
 from torch.utils.data import DataLoader, Dataset
 import os
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
 import matplotlib.pyplot as plt
 import numpy as np
 
-#######################
-hr_size = 256
-upscale_factor = 4
-######################
-primary_transform = A.Compose(
-    [
-        A.RandomCrop(width=hr_size, height=hr_size),
-        A.HorizontalFlip(p=0.5),
-        A.RandomRotate90(p=0.5),
-    ]
-)
 
-# hr_transform = A.Compose(
-#     [
-#         A.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5]),
-#         ToTensorV2()
-#     ]
-# )
-
-hr_transform = A.Compose(
-    [
-        A.Normalize(mean=[0, 0, 0], std=[1,1,1]),
-        ToTensorV2()
-    ]
-)
-lr_transform = A.Compose(
-    [
-        A.Resize(width=hr_size // upscale_factor, height=hr_size // upscale_factor, interpolation=Resampling.BICUBIC),
-        A.Normalize(mean=[0, 0, 0], std=[1, 1, 1]),
-        ToTensorV2(),
-    ]
-)
-
-
-class superres(Dataset):
-    def __init__(self, hr_data_dir, hr_transform, lr_transform, primary_transform):
+class SuperRes(Dataset):
+    def __init__(self, hr_data_dir, hr_image_size, upscale_factor, mode):
+        super(SuperRes, self).__init__()
         self.hr_data_dir = hr_data_dir
-        self.hr_transform = hr_transform
-        self.lr_transform = lr_transform
-        self.primary_transform = primary_transform
         self.image_list = os.listdir(hr_data_dir)
         self.image_list = sorted(self.image_list)
+        self.hr_image_size = hr_image_size
+        self.upscale_factor = upscale_factor
+        self.mode = mode
 
     def __len__(self):
         return len(self.image_list)
 
     def __getitem__(self, index):
         img_name = self.image_list[index]
-        image = np.array(Image.open(os.path.join(self.hr_data_dir, img_name)))
-        image = self.primary_transform(image=image)["image"]
-        hr_image = self.hr_transform(image=image)["image"]
-        lr_image = self.lr_transform(image=image)["image"]
-        return hr_image, lr_image, img_name
+        image = cv2.imread(os.path.join(self.hr_data_dir, img_name)).astype(np.float32) / 255.
+        if self.mode == "Train":
+            hr_image = improc.random_crop(image, self.hr_image_size)
+            hr_image = improc.random_rotate(hr_image, [90, 180, 270])
+            hr_image = improc.random_horizontally_flip(hr_image, 0.5)
+            hr_image = improc.random_vertically_flip(hr_image, 0.5)
+        elif self.mode == "Valid":
+            hr_image = improc.center_crop(image, self.hr_image_size)
+        else:
+            raise ValueError("Unsupported data processing model, please use `Train` or `Valid`.")
+
+        lr_image = improc.image_resize(hr_image, 1 / self.upscale_factor)
+
+        hr_image = cv2.cvtColor(hr_image, cv2.COLOR_BGR2RGB)
+        lr_image = cv2.cvtColor(lr_image, cv2.COLOR_BGR2RGB)
+
+        hr_tensor = improc.image_to_tensor(hr_image, False, False)
+        lr_tensor = improc.image_to_tensor(lr_image, False, False)
+
+        return hr_tensor, lr_tensor
 
 
-def get_loader(hr_data_dir, batch_size, shuffle):
-    dataset = superres(hr_data_dir, hr_transform, lr_transform, primary_transform)
+def get_loader(hr_data_dir, hr_image_size, upscale_factor, mode, batch_size, shuffle):
+    dataset = SuperRes(hr_data_dir, hr_image_size, upscale_factor, mode)
     d_loader = DataLoader(dataset, batch_size=batch_size, shuffle=shuffle, num_workers=3)
     return d_loader
 
 
-# data_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 16, False)
-# for high_res, low_res, in data_loader:
-#     print(low_res.shape)
-#     print(high_res.shape)
-#     break
+#
+# data_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Train", 16, True)
 # a, b = next(iter(data_loader))
 #
 # plt.imshow(np.transpose(utils.make_grid(a[:16], padding=2, normalize=True), (1, 2, 0)))
