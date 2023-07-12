@@ -1,5 +1,5 @@
 from model import RRDBNet
-from model3 import RRDBNet2
+from uncertainity.model import DRRRDBNet
 import torch
 from data_loader import get_loader
 from torchvision.utils import save_image
@@ -36,10 +36,10 @@ def load_weights2(checkpoint_file, model):
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #gen = RRDBNet2(3, 3, 64, 32, 23, 4).to(device)
 gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
-gen2 = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
+gen2 = DRRRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
 
-gen = load_weights("gen80.pth.tar", gen)
-gen2 = load_weights("gen160.pth.tar", gen2)
+gen = load_weights("models/newdis/gen182.pth.tar", gen)
+gen2 = load_weights("uncertainity/models/dropgan/gen182.pth.tar", gen2)
 valid_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Valid", 1, True)
 gen.eval()
 gen2.eval()
@@ -47,7 +47,7 @@ gen2.eval()
 # high_res, low_res = next(iter(valid_loader))
 # hr_image = high_res.to(device)
 # lr_image = low_res.to(device)
-# with torch.no_grad():1
+# with torch.no_grad():
 #     u_img = gen(lr_image)
 #     u_img2 = gen2(lr_image)
 #     u_img = u_img.cpu()
@@ -88,11 +88,11 @@ transform4 = transforms.Compose([
     transforms.Normalize(mean=(0, 0, 0), std=(1, 1, 1))
 ])
 
-random_image = random.choice(os.listdir("../SRGAN/data/HR/HR_test/test"))
-image = Image.open("../SRGAN/data/HR/HR_test/test/"+random_image)
+random_image = random.choice(os.listdir("../SRGAN/data/HR/HR_test/"))
+image = Image.open("../SRGAN/data/HR/HR_test/"+random_image)
 height, width = image.size
 lr_image = transform4(image)
-# #######################################################################
+# # #######################################################################
 
 with torch.no_grad():
     lr_image = lr_image.to(device)
