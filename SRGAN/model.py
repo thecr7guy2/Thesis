@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torchinfo import summary
+
 
 class ConvBlock(nn.Module):
     def __init__(
@@ -62,7 +62,7 @@ class ResidualBlock(nn.Module):
         return out + x
 
 
-class Generator(nn.Module):
+class generator(nn.Module):
     def __init__(self, in_channels=3, num_channels=64, num_blocks=16):
         super().__init__()
         self.initial = ConvBlock(in_channels, num_channels, kernel_size=9, stride=1, padding=4, use_bn=False)
@@ -112,5 +112,5 @@ class Discriminator(nn.Module):
         return self.classifier(x)
 
 
-gen = Generator()
-summary(gen, input_size=(16, 3, 24, 24))
+# gen = Generator()
+# summary(gen, input_size=(16, 3, 64,64))

@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torchinfo import summary
+# from torchinfo import summary
 
 
 class RD_block(nn.Module):
@@ -207,13 +207,13 @@ def weights_init(m):
         if m.bias is not None:
             nn.init.constant_(m.bias, 0)
 
-
+#
 # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# # gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
-# # gen_opt = torch.optim.Adam(gen.parameters(), lr=1e-4, betas=(0.9, 0.999))
-# # gen_model = gen.apply(weights_init)
-# # # summary(gen, input_size=(16, 3, 64, 64))
-# dis = Discriminator().to(device)
-# summary(dis, input_size=(16, 3, 256, 256))
+# gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
+# # # gen_opt = torch.optim.Adam(gen.parameters(), lr=1e-4, betas=(0.9, 0.999))
+# # # gen_model = gen.apply(weights_init)
+# summary(gen, input_size=(16, 3, 64, 64))
+# # # dis = Discriminator().to(device)
+# # # summary(dis, input_size=(16, 3, 256, 256))
 
 #############################################

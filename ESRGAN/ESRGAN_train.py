@@ -10,7 +10,8 @@ import os
 
 experiment = "ensemble1"
 exp_path = os.path.join("models", experiment)
-os.mkdir(exp_path)
+if not os.path.exists(exp_path):
+    os.mkdir(exp_path)
 
 
 def save_checkpoint(model, optimizer, scheduler, epoch, psnr, ssim, filename="my_checkpoint.pth.tar"):
@@ -149,8 +150,8 @@ def eval_one_epoch(gen_model, loader, psnr_criterion, ssim_criterion):
 epochs = 200
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-train_loader = get_loader("../../../../storage/sai/data/HR/DIV2K_train_HR", 256, 4, "Train", 16, True)
-val_loader = get_loader("../../../../storage/sai/data/4K/test/HR", 256, 4, "Valid", 16, False)
+train_loader = get_loader("../../../../../../storage/sai/data/HR/DIV2K_train_HR", 256, 4, "Train", 16, True)
+val_loader = get_loader("../../../../../../storage/sai/data/4K/test/HR", 256, 4, "Valid", 16, False)
 
 print("Load all datasets successfully.\n")
 
@@ -188,7 +189,7 @@ ui = int(input('''Press 1 to load pre-trained weights.
                 Press 2 to start training the models from scratch\n'''))
 if ui == 1:
     gen, gen_opt, gen_scheduler, curr_epoch, psnr, ssim = load_checkpoint("gen.pth.tar", gen, gen_opt, gen_scheduler)
-    dis, dis_opt, dis_scheduler, curr_epoch2, psnr2, ssim2 = load_checkpoint("dis.pth.tar", gen, gen_opt, gen_scheduler)
+    dis, dis_opt, dis_scheduler, curr_epoch2, psnr2, ssim2 = load_checkpoint("dis.pth.tar", dis, dis_opt, dis_scheduler)
     print("Checkpoint Loaded Successfully. Training will now Resume\n")
     print("The last best psnr recorded was" + str(psnr))
     start = curr_epoch + 1
@@ -196,8 +197,8 @@ if ui == 1:
     best_ssim = ssim
 else:
     gen = load_weights("bestgen.pth.tar", gen)
-    #gen = gen.apply(gen_weights_init)
-    #dis = dis.apply(dis_weights_init)
+    # gen = gen.apply(gen_weights_init)
+    # dis = dis.apply(dis_weights_init)
     print("The model will now be trained from scratch\n")
     start = 0
     best_psnr = 0
@@ -239,5 +240,4 @@ for epoch in range(start, epochs):
         #                 filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
     if epoch % 5 == 0:
         save_checkpoint(dis, dis_opt, dis_scheduler, epoch, best_psnr, best_ssim,
-                         filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")
-
+                        filename="models/" + experiment + "/dis" + str(epoch) + ".pth.tar")

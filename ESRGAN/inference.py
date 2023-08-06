@@ -14,8 +14,6 @@ from sklearn.preprocessing import MinMaxScaler
 from torchvision.transforms import InterpolationMode
 from scipy.stats import norm
 
-scaler = MinMaxScaler(feature_range=(0, 1))
-
 
 def load_weights(checkpoint_file, model):
     print("=> Loading weights")
@@ -138,14 +136,19 @@ std_flat = torch.flatten(std_batch)
 ors_flat = torch.flatten(ors_image)
 mean_flat = torch.flatten(mean_batch)
 
+np.save("std_flat.npy", std_flat.cpu().numpy())
+np.save("ors_flat.npy", ors_flat.cpu().numpy())
+np.save("mean_flat.npy", mean_flat.cpu().numpy())
+
+
 print(err_flat.shape)
 print(std_flat.shape)
 
-plt.scatter(std_flat.cpu().numpy(), err_flat.cpu().numpy())
-plt.title("Error plot")
-plt.xlabel("Standard deviation")
-plt.ylabel("Error")
-plt.savefig('../Infrence/error_plot.png', bbox_inches='tight')
+# plt.scatter(std_flat.cpu().numpy(), err_flat.cpu().numpy())
+# plt.title("Error plot")
+# plt.xlabel("Standard deviation")
+# plt.ylabel("Error")
+# plt.savefig('../Infrence/error_plot.png', bbox_inches='tight')
 
 
 # img = cv2.imread('../Infrence/gen_img2.png')
@@ -191,3 +194,36 @@ def regressor_calibration_curve(y_pred, y_true, y_std, num_points=20, distributi
 
     return np.array(curve_conf), np.array(curve_acc)
 
+
+def regressor_error_confidence_curve(y_pred, y_true, y_std, num_points=20, distribution="gaussian", error_metric="mae",
+                                     normalize_std=False):
+    min_conf = y_std.min()
+    max_conf = y_std.max()
+    candidate_confs = np.linspace(min_conf, max_conf, num=num_points)
+
+    out_confidences = []
+    out_errors = []
+
+    metric_fn = None
+
+    if error_metric is "mae":
+        metric_fn = lambda x, y: np.mean(np.abs(x - y))
+    elif error_metric is "mse":
+        metric_fn = lambda x, y: np.mean(np.square(x - y))
+    else:
+        raise ValueError("Uknown regression error metric {}".format(error_metric))
+
+    for confidence in candidate_confs:
+        examples_idx = np.where(y_std >= confidence)[0]
+        filt_preds = y_pred[examples_idx]
+        filt_true = y_true[examples_idx]
+
+        error = metric_fn(filt_true, filt_preds)
+
+        if normalize_std:
+            confidence = (confidence - min_conf) / (max_conf - min_conf)
+
+        out_confidences.append(confidence)
+        out_errors.append(error)
+
+    return np.array(out_confidences), np.array(out_errors)

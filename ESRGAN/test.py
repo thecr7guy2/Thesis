@@ -1,11 +1,12 @@
 from model import RRDBNet
+from model3 import RRDBNet2
 from uncertainity.model import DRRRDBNet
 import torch
 from data_loader import get_loader
 from torchvision.utils import save_image
 from PIL import Image
 import torchvision.transforms as transforms
-from PIL.Image import Resampling
+from torchvision.transforms import InterpolationMode
 import os
 import random
 
@@ -35,13 +36,13 @@ def load_weights2(checkpoint_file, model):
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #gen = RRDBNet2(3, 3, 64, 32, 23, 4).to(device)
-gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
-gen2 = DRRRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
+# gen = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
+gen2 = RRDBNet(3, 3, 64, 32, 2, 0.2).to(device)
 
-gen = load_weights("models/newdis/gen182.pth.tar", gen)
-gen2 = load_weights("uncertainity/models/dropgan/gen182.pth.tar", gen2)
-valid_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Valid", 1, True)
-gen.eval()
+#gen = load_weights("ESRGAN_x4-DFO2K-25393df7.pth.tar", gen)
+gen2 = load_weights("models/ensemble3/gen200.pth.tar", gen2)
+#valid_loader = get_loader("../SRGAN/data/HR/DIV2K_valid_HR", 256, 4, "Valid", 1, True)
+#gen.eval()
 gen2.eval()
 
 # high_res, low_res = next(iter(valid_loader))
@@ -83,13 +84,13 @@ gen2.eval()
 
 # ################################################################
 transform4 = transforms.Compose([
-    transforms.Resize((64, 64)),
+    transforms.RandomCrop((480,480)),
     transforms.ToTensor(),
     transforms.Normalize(mean=(0, 0, 0), std=(1, 1, 1))
 ])
 
-random_image = random.choice(os.listdir("../SRGAN/data/HR/HR_test/"))
-image = Image.open("../SRGAN/data/HR/HR_test/"+random_image)
+random_image = random.choice(os.listdir("../SRGAN/data/HR/HR_test/test/"))
+image = Image.open("../SRGAN/data/HR/HR_test/test/"+random_image)
 height, width = image.size
 lr_image = transform4(image)
 # # #######################################################################
@@ -97,11 +98,11 @@ lr_image = transform4(image)
 with torch.no_grad():
     lr_image = lr_image.to(device)
     lr_image = lr_image.unsqueeze(0)
-    sr_image = gen(lr_image)
+    #sr_image = gen(lr_image)
     sr_image2 = gen2(lr_image)
-    sr_image = sr_image.cpu()
+    #sr_image = sr_image.cpu()
     sr_image2 = sr_image2.cpu()
-    save_image(sr_image, "gen_img.png")
+    #save_image(sr_image, "gen_img.png")
     save_image(sr_image2, "gen_img2.png")
     #save_image(hr_image, "original.png")
     save_image(lr_image, "low_res.png")
