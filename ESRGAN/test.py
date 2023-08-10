@@ -84,7 +84,7 @@ gen2.eval()
 
 # ################################################################
 transform4 = transforms.Compose([
-    transforms.RandomCrop((480,480)),
+    #transforms.RandomCrop((480,480)),
     transforms.ToTensor(),
     transforms.Normalize(mean=(0, 0, 0), std=(1, 1, 1))
 ])
@@ -102,6 +102,7 @@ with torch.no_grad():
     sr_image2 = gen2(lr_image)
     #sr_image = sr_image.cpu()
     sr_image2 = sr_image2.cpu()
+    print(sr_image2.squeeze(0).shape)
     #save_image(sr_image, "gen_img.png")
     save_image(sr_image2, "gen_img2.png")
     #save_image(hr_image, "original.png")
