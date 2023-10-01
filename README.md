@@ -12,4 +12,10 @@ The purpose of this research is to advance super-resolution capabilities through
 ## Main Findings
 1. ### Uncertainty-Aware Super-Resolution:
    - The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
-   - The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
+   - This approach aids in distinguishing between genuine anomalies and artifacts produced by the model, supporting precise interventions and well-informed decisions in critical domains like medical imaging and aerial imaging.
+
+2. ### Optimal Method for Uncertainty Estimation:
+   - The study compares different uncertainty estimation techniques to determine the optimal method in terms of performance and impact on the stability of the training process and convergence properties of GANs.
+
+3. ### Enhanced Interpretability and Reliability:
+   - The incorporation of uncertainty modeling enhances the interpretability and reliability of deep learning algorithms, providing insights into the confidence or certainty associated with each prediction and allowing researchers and professionals to assess the potential risks associated with deploying the algorithms.
