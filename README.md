@@ -11,5 +11,5 @@ The purpose of this research is to advance super-resolution capabilities through
 
 ## Main Findings
 1. ### Uncertainty-Aware Super-Resolution:
-   -The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
-   -The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
+   - The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
+   - The integration of uncertainty estimation with super-resolution GANs produces enhanced images with quantified reliability, enabling the pinpointing of regions in the image where confidence is lower.
